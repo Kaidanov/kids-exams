@@ -1,499 +1,718 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>לימוד נצרות לכיתה ז'</title>
+    <title>לימודי נצרות - דסגנון Duolingo</title>
     <style>
-        /* סגנונות */
-        body { 
-            font-family: Arial, sans-serif; 
-            direction: rtl; 
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+        :root {
+            --primary: #58cc02;
+            --primary-hover: #46a302;
+            --secondary: #fff;
+            --text: #3c3c3c;
+            --error: #ff4b4b;
+            --correct: #58cc02;
+            --border-radius: 12px;
         }
-        .section, .question { 
-            margin-top: 20px; 
-            display: none;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .hint { 
-            color: #666;
-            padding: 10px;
-            background-color: #fff3cd;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-        .icon { 
-            cursor: pointer; 
-            margin-right: 10px;
-            font-size: 1.2em;
-            padding: 5px;
-            border-radius: 50%;
-            background-color: #e9ecef;
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            line-height: 30px;
-        }
-        .active { 
-            display: block; 
-        }
-        button {
-            padding: 8px 16px;
-            margin: 10px 0;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .progress {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .feedback {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            text-align: center;
-        }
-        .feedback.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .feedback.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .results-container {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        ul {
-            list-style-type: none;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
         }
-        li {
-            margin: 10px 0;
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
         }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 100%;
+            margin: 0;
+            padding: 10px;
+            background-color: #fff;
+            color: var(--text);
+            padding-bottom: 100px;
+            font-size: 14px;
+            padding-top: 100px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .progress-container {
+            background: #e5e5e5;
+            height: 16px;
+            border-radius: 8px;
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            background: var(--primary);
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .hearts {
+            color: var(--error);
+            font-size: 24px;
+        }
+
+        .lesson-card {
+            background: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+        }
+
+        .lesson-content {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
         .question {
-            display: none;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
-        .options label {
+        .option {
+            min-height: 44px;
+            padding: 8px 12px;
+            word-wrap: break-word;
+            border: 2px solid #e5e5e5;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
+        }
+
+        .option:hover {
+            background: #f7f7f7;
+            border-color: #ccc;
+        }
+
+        .option.correct {
+            background: #e6f8e6;
+            border-color: var(--correct);
+            color: var(--correct);
+        }
+
+        .option.incorrect {
+            background: #ffebeb;
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .hint-button {
+            background: none;
+            border: none;
+            color: #afafaf;
             cursor: pointer;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .progress {
-            width: 0%;
-            height: 20px;
-            background-color: #4CAF50;
-            text-align: center;
-            line-height: 20px;
-            color: white;
-            transition: width 0.3s ease;
+        .hint-button:hover {
+            color: var(--text);
         }
 
-        #results {
+        .hint-content {
+            background: #fff3cd;
+            border-radius: var(--border-radius);
+            padding: 10px;
+            margin-bottom: 16px;
             display: none;
-            text-align: center;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
         }
-        
-        .navigation-buttons {
+
+        .navigation {
             display: flex;
             justify-content: space-between;
-            margin: 20px 0;
-        }
-        
-        .section-content {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .question-section {
-            background-color: #e9f7ef;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .active {
-            display: block !important;
+            margin-top: 24px;
         }
 
-        .unit-header {
-            background-color: #4CAF50;
+        .nav-button {
+            background: var(--primary);
             color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: var(--primary-hover);
+        }
+
+        .nav-button:disabled {
+            background: #e5e5e5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
             text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
         }
 
-        .learning-phase, .question-phase {
-            display: none;
+        .feedback.show {
+            transform: translateY(0);
         }
 
-        .learning-phase.active, .question-phase.active {
-            display: block;
+        .feedback.correct {
+            background: var(--correct);
+            color: white;
         }
 
-        .navigation-hint {
-            background-color: #e8f5e9;
+        .feedback.incorrect {
+            background: var(--error);
+            color: white;
+        }
+
+        .topic-badge {
+            background: #f1f1f1;
+            padding: 3px 8px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: #666;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 80px;
+            }
+
+            .lesson-card {
+                max-height: calc(100vh - 200px);
+            }
+
+            .option {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .lesson-card {
+                padding: 15px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .lesson-card {
+                padding: 20px;
+                max-width: 800px;
+            }
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
             padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .level-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ffd700;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .xp-counter {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #58cc02;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .achievement {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
             text-align: center;
-            font-size: 0.9em;
+            display: none;
+            z-index: 1001;
         }
 
-        .back-to-material {
-            background-color: #2196F3 !important;
+        .achievement.show {
+            display: block;
+            animation: popIn 0.5s ease-out;
         }
 
-        .back-to-material:hover {
-            background-color: #1976D2 !important;
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .streak-counter {
+            position: fixed;
+            top: 45px;
+            right: 10px;
+            background: #ff9600;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .crown-progress {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0 15px 0;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            z-index: 900;
+        }
+
+        .crown {
+            font-size: 24px;
+            opacity: 0.3;
+        }
+
+        .crown.earned {
+            opacity: 1;
+            animation: crownEarned 0.5s ease-out;
+        }
+
+        @keyframes crownEarned {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .header {
+            margin: 50px 0 15px 0;
+        }
+
+        .lesson-card p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .mascot {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            font-size: 80px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .mascot:hover {
+            transform: scale(1.1);
+        }
+
+        .feedback.correct .mascot-feedback {
+            font-size: 40px;
+            margin-right: 10px;
+        }
+
+        .feedback.incorrect .mascot-feedback {
+            font-size: 40px;
+            margin-right: 10px;
+        }
+
+        .achievement .mascot-achievement {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        .jumping {
+            animation: jump 1s ease infinite;
+        }
+
+        .hint-button span {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .hint-button:hover span {
+            transform: rotate(360deg);
+        }
+
+        .option.correct::before {
+            content: '🌟';
+            margin-left: 10px;
+        }
+
+        .option.incorrect::before {
+            content: '😅';
+            margin-left: 10px;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         .progress-container {
-            background-color: #e9ecef;
-            border-radius: 4px;
-            padding: 10px;
-            margin: 20px 0;
+            flex-grow: 1;
+            height: 12px;
+            margin: 0 10px;
         }
 
-        .progress-text {
-            text-align: center;
-            margin-bottom: 5px;
+        .hearts {
+            font-size: 20px;
+            min-width: 80px;
+            text-align: right;
         }
 
-        .progress-bar {
-            height: 20px;
-            background-color: #4CAF50;
-            border-radius: 4px;
-            transition: width 0.3s ease;
+        #progress-text {
+            min-width: 60px;
+            text-align: left;
+        }
+
+        .level-indicator {
+            top: 60px;
+        }
+
+        .xp-counter {
+            top: 60px;
+        }
+
+        .streak-counter {
+            top: 95px;
         }
     </style>
 </head>
 <body>
-    <h1>לימוד נצרות לכיתה ז'</h1>
-    <div id="content">
-        <!-- Units will be generated here -->
+    <div class="top-bar">
+        <div class="hearts">❤️❤️❤️</div>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 0%"></div>
+        </div>
+        <div id="progress-text">0/0</div>
     </div>
+
+    <div id="lesson-container"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="fixed-bottom">
+        <div class="navigation">
+            <button class="nav-button" onclick="showPreviousUnit()">הקודם</button>
+            <button class="nav-button" onclick="showNextUnit()">הבא</button>
+        </div>
+    </div>
+
     <script>
-        const learningUnits = [
-            {
-                id: 1,
-                title: "רקע היסטורי - ארץ ישראל תחת שלטון רומי",
-                content: `בתקופת הולדת הנצרות, ארץ ישראל הייתה תחת שלטון האימפריה הרומית. השלטון הרומי החל בשנת 63 לפנה"ס והשפיע מאוד על החיים הדתיים והחברתיים של התושבים.
+        let learningUnits = [];
+        let currentUnitIndex = 0;
+        let answeredQuestions = new Set();
+        let hearts = 3;
+        let xp = 0;
+        let level = 1;
+        let streak = 0;
+        let crowns = 0;
 
-בתקופה זו התקיימו בארץ ישראל זרמים דתיים שונים:
-• פרושים - שמרו על המצוות והתורה
-• צדוקים - האמינו רק בתורה שבכתב
-• איסיים - חיו בקהילות מבודדות
-• קנאים - התנגדו לשלטון הרומי`,
-                question: {
-                    text: "מתי החל השלטון הרומי בארץ ישראל?",
-                    hint: "חשוב על תקופת פומפיוס.",
-                    options: [
-                        { text: "63 לפנה\"ס", correct: true },
-                        { text: "70 לספירה", correct: false },
-                        { text: "132 לספירה", correct: false }
-                    ]
-                }
-            },
-            {
-                id: 2,
-                title: "לידת הנצרות - ישו ותורתו",
-                content: `הנצרות החלה את דרכה כתנועה יהודית קטנה בארץ ישראל. ישו, מייסד הדת, היה יהודי שלימד את תורתו בקרב היהודים.
+        const mascots = ['🦊', '🐼', '🐨', '🐯', '🦁', '🐸'];
+        let currentMascot = 0;
 
-עיקרי תורתו של ישו:
-• אהבת האל ואהבת הזולת
-• פרשנות חדשה למצוות היהדות
-• הטפה לחיי צניעות וענווה
-• אמונה שהוא המשיח שנשלח לגאול את האנושות
-
-ישו הטיף בעיקר בגליל ובירושלים, וסביבו התקבצו תלמידים שהאמינו בתורתו.`,
-                question: {
-                    text: "מה היו עיקרי תורתו של ישו?",
-                    hint: "חשוב על היחס לזולת ולאל",
-                    options: [
-                        { text: "רק קיום מצוות", correct: false },
-                        { text: "אהבת האל והזולת", correct: true },
-                        { text: "התנגדות לרומאים", correct: false },
-                        { text: "לימוד פילוסופיה", correct: false }
-                    ]
-                }
-            },
-            {
-                id: 3,
-                title: "עיקרי האמונה הנוצרית",
-                content: `הנצרות היא דת מונותאיסטית המבוססת על כמה עיקרי אמונה מרכזיים:
-
-1. השילוש הקדוש:
-• האב (האל)
-• הבן (ישו)
-• רוח הקודש
-
-2. האמונה בישו כמשיח:
-• נולד מרוח הקודש
-• מת על הצלב לכפר על חטאי האנושות
-• קם לתחייה לאחר שלושה ימים
-
-3. התגלמות:
-• ישו הוא התגלמות אלוהית בדמות אדם
-• ירד לעולם כדי לגאול את האנושות מחטאיה`,
-                question: {
-                    text: "ממה מורכב השילוש הקדוש?",
-                    hint: "שלושת המרכיבים העיקריים באמונה",
-                    options: [
-                        { text: "משה, אהרון ומרים", correct: false },
-                        { text: "האב, הבן ורוח הקודש", correct: true },
-                        { text: "אברהם, יצחק ויעקב", correct: false },
-                        { text: "פטרוס, פאולוס ויוחנן", correct: false }
-                    ]
-                }
-            },
-            {
-                id: 4,
-                title: "הסקרמנטים - טקסים מקודשים",
-                content: `בנצרות ישנם שבעה טקסים מקודשים (סקרמנטים) חשובים:
-
-1. טבילה (Baptism):
-• טקס הכניסה לנצרות
-• סמל ללידה מחדש בחיי האמונה
-
-2. אישוש (Confirmation):
-• טקס התבגרות דתי
-• משיחה בשמן קדוש (חמר)
-
-3. האוכריסטיה (מיסה):
-• הטקס המרכזי בפולחן הנוצרי
-• אכילת לחם ושתיית יין המסמלים את גופו ודמו של ישו
-
-4. וידוי:
-• הודאה בחטאים בפני הכומר
-• קבלת מחילה
-
-5. נישואין
-6. הסמכה לכהונה
-7. משיחה אחרונה`,
-                question: {
-                    text: "מה מסמלת הטבילה בנצרות?",
-                    hint: "משמעות הטקס לחיי המאמין",
-                    options: [
-                        { text: "טהרה מחטאים", correct: false },
-                        { text: "לידה מחדש באמונה", correct: true },
-                        { text: "הסמכה לכהונה", correct: false },
-                        { text: "נישואין", correct: false }
-                    ]
-                }
+        async function loadUnits() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                learningUnits = data.learningUnits;
+                showUnit(currentUnitIndex);
+                updateProgress();
+            } catch (error) {
+                console.error('Error loading units:', error);
             }
-        ];
+        }
 
-        let currentUnit = 1;
-        let answers = {};
-        const totalUnits = learningUnits.length;
-
-        function generateUnits() {
-            const container = document.getElementById('content');
-            const unitsHTML = learningUnits.map(unit => `
-                <div class="learning-unit ${unit.id === 1 ? 'active' : 'hidden'}" id="unit${unit.id}">
-                    <div class="unit-header">
-                        <h2>יחידה ${unit.id}: ${unit.title}</h2>
-                    </div>
-                    
-                    <div class="learning-phase active" id="learning${unit.id}">
-                        <div class="section-content">
-                            <p id="explanation${unit.id}">${unit.content}</p>
-                            <span class="icon" onclick="readAloud('explanation${unit.id}')">🔊</span>
-                        </div>
-                        
-                        <div class="navigation-hint">
-                            קרא את החומר בעיון ולחץ על "למעבר לשאלה" כשאתה מוכן
-                        </div>
-                        
-                        <div class="navigation-buttons">
-                            <button onclick="previousUnit()" ${unit.id === 1 ? 'disabled' : ''}>הקודם</button>
-                            <button onclick="showQuestion(${unit.id})">למעבר לשאלה</button>
-                        </div>
-                    </div>
-                    
-                    <div class="question-phase" id="question${unit.id}">
-                        <div class="question-section">
-                            <h3>שאלה על ${unit.title}</h3>
-                            <p id="q${unit.id}">${unit.question.text}</p>
-                            <button onclick="showHint(${unit.id})">רמז</button>
-                            <button class="back-to-material" onclick="backToMaterial(${unit.id})">חזרה לחומר הלימוד</button>
-                            <p class="hint hidden" id="hint${unit.id}">${unit.question.hint}</p>
-                            <div class="options">
-                                ${unit.question.options.map(option => `
-                                    <label>
-                                        <input type="radio" name="q${unit.id}" value="${option.correct ? '1' : '0'}">
-                                        ${option.text}
-                                    </label>
-                                `).join('')}
-                            </div>
-                            <div id="feedback${unit.id}"></div>
-                        </div>
-                        
-                        <div class="navigation-buttons">
-                            <button onclick="previousUnit()" ${unit.id === 1 ? 'disabled' : ''}>הקודם</button>
-                            <button onclick="checkAndProceed(${unit.id})">${unit.id === learningUnits.length ? 'סיים' : 'הבא'}</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        function showUnit(index) {
+            if (index < 0 || index >= learningUnits.length) return;
+            
+            const unit = learningUnits[index];
+            const container = document.getElementById('lesson-container');
             
             container.innerHTML = `
-                <div class="progress-container">
-                    <div class="progress-text" id="progress"></div>
-                    <div class="progress-bar" id="progressBar"></div>
+                <div class="lesson-card">
+                    <div class="topic-badge">${unit.topic || 'נושא כללי'}</div>
+                    <h2>${unit.title}</h2>
+                    <div class="lesson-content">${unit.content}</div>
+                    
+                    <div class="question">${unit.question.text}</div>
+                    
+                    <button class="hint-button" onclick="toggleHint(this)">
+                        <span>💡</span> הצג רמז
+                    </button>
+                    <div class="hint-content">
+                        ${unit.question.hint}
+                    </div>
+                    
+                    <div class="options">
+                        ${unit.question.options.map((option, i) => `
+                            <div class="option" onclick="checkAnswer(${i}, ${option.correct}, ${unit.id})">
+                                ${option.text}
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                ${unitsHTML}
             `;
         }
 
-        function checkAndProceed(unitId) {
-            const selected = document.querySelector(`input[name="q${unitId}"]:checked`);
-            const feedbackDiv = document.getElementById(`feedback${unitId}`);
+        function toggleHint(button) {
+            const hintContent = button.nextElementSibling;
+            const isHidden = hintContent.style.display === 'none' || !hintContent.style.display;
             
-            if (!selected) {
-                feedbackDiv.innerHTML = '<div class="feedback">אנא בחר תשובה</div>';
+            hintContent.style.display = isHidden ? 'block' : 'none';
+            button.innerHTML = isHidden ? 
+                '<span>💡</span> הסתר רמז' : 
+                '<span>💡</span> הצג רמז';
+        }
+
+        function showFeedback(isCorrect) {
+            const feedback = document.getElementById('feedback');
+            const mascot = isCorrect ? '🎊' : '🤔';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+            feedback.innerHTML = `
+                <span class="mascot-feedback">${mascot}</span>
+                ${isCorrect ? 'כל הכבוד! 🎉' : 'לא נכון, נסה שוב 😕'}
+            `;
+            
+            setTimeout(() => {
+                feedback.className = 'feedback';
+            }, 2000);
+        }
+
+        function checkAnswer(optionIndex, isCorrect, questionId) {
+            const options = document.querySelectorAll('.option');
+            const selectedOption = options[optionIndex];
+            
+            if (isCorrect) {
+                selectedOption.classList.add('correct');
+                if (!answeredQuestions.has(questionId)) {
+                    answeredQuestions.add(questionId);
+                    updateProgress();
+                    addXP(20);
+                    updateStreak();
+                }
+                showFeedback(true);
+                
+                setTimeout(() => {
+                    if (currentUnitIndex < learningUnits.length - 1) {
+                        showNextUnit();
+                    }
+                }, 1500);
+            } else {
+                selectedOption.classList.add('incorrect');
+                hearts--;
+                updateHearts();
+                showFeedback(false);
+                
                 return;
             }
-            
-            answers[unitId] = {
-                answer: selected.value === "1",
-                attempted: true
-            };
-            
-            if (selected.value === "1") {
-                feedbackDiv.innerHTML = '<div class="feedback success">נכון! כל הכבוד! 🎉</div>';
-                setTimeout(() => nextUnit(), 1500);
-            } else {
-                feedbackDiv.innerHTML = '<div class="feedback error">לא נכון. נסה שוב! 🤔</div>';
+
+            if (isCorrect) {
+                options.forEach(option => {
+                    option.style.pointerEvents = 'none';
+                });
             }
         }
 
-        function nextUnit() {
-            if (currentUnit < totalUnits) {
-                document.querySelector(`#unit${currentUnit}`).classList.add('hidden');
-                document.querySelector(`#unit${currentUnit}`).classList.remove('active');
-                currentUnit++;
-                document.querySelector(`#unit${currentUnit}`).classList.remove('hidden');
-                document.querySelector(`#unit${currentUnit}`).classList.add('active');
-                updateProgress();
-            } else {
-                showFinalResults();
-            }
-        }
-
-        function previousUnit() {
-            if (currentUnit > 1) {
-                document.querySelector(`#unit${currentUnit}`).classList.add('hidden');
-                document.querySelector(`#unit${currentUnit}`).classList.remove('active');
-                currentUnit--;
-                document.querySelector(`#unit${currentUnit}`).classList.remove('hidden');
-                document.querySelector(`#unit${currentUnit}`).classList.add('active');
-                updateProgress();
-            }
-        }
-
-        function showHint(unitId) {
-            const hint = document.getElementById(`hint${unitId}`);
-            hint.classList.toggle('hidden');
+        function updateHearts() {
+            const heartsDisplay = document.querySelector('.hearts');
+            heartsDisplay.textContent = '❤️'.repeat(hearts);
         }
 
         function updateProgress() {
-            const progressElement = document.getElementById('progress');
-            const progressBar = document.getElementById('progressBar');
-            const percentage = (currentUnit / totalUnits) * 100;
+            const total = learningUnits.length;
+            const answered = answeredQuestions.size;
+            const percentage = (answered / total) * 100;
             
-            progressElement.textContent = `יחידה ${currentUnit} מתוך ${totalUnits}: ${learningUnits[currentUnit-1].title}`;
-            progressBar.style.width = `${percentage}%`;
+            document.querySelector('.progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${answered}/${total}`;
         }
 
-        function showFinalResults() {
-            const correct = Object.values(answers).filter(a => a.answer).length;
-            const total = Object.values(answers).length;
-            const percentage = Math.round((correct / total) * 100);
+        function showPreviousUnit() {
+            if (currentUnitIndex > 0) {
+                currentUnitIndex--;
+                showUnit(currentUnitIndex);
+                const lastQuestionId = learningUnits[currentUnitIndex + 1].id;
+                answeredQuestions.delete(lastQuestionId);
+                updateProgress();
+            }
+        }
+
+        function showNextUnit() {
+            const currentQuestionId = learningUnits[currentUnitIndex].id;
+            if (answeredQuestions.has(currentQuestionId)) {
+                if (currentUnitIndex < learningUnits.length - 1) {
+                    currentUnitIndex++;
+                    showUnit(currentUnitIndex);
+                }
+            } else {
+                showFeedback(false);
+            }
+        }
+
+        function addXP(amount) {
+            xp += amount;
+            document.querySelector('.xp-counter').textContent = `XP: ${xp}`;
             
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div class="results-container">
-                    <h2>סיימת את המבחן!</h2>
-                    <p>ענית נכון על ${correct} שאלות מתוך ${total}</p>
-                    <p>ציון סופי: ${percentage}%</p>
-                    <button onclick="location.reload()">התחל מחדש</button>
-                </div>
+            if (xp >= level * 100) {
+                levelUp();
+            }
+        }
+
+        function levelUp() {
+            level++;
+            document.querySelector('.level-indicator').textContent = `רמה ${level}`;
+            showAchievement(`
+                <div style="font-size: 40px">🎮</div>
+                עלית לרמה ${level}! 
+                <div style="font-size: 30px">🎉✨</div>
+            `);
+        }
+
+        function showAchievement(text) {
+            const achievement = document.getElementById('achievement');
+            achievement.innerHTML = `
+                <div class="mascot-achievement">🎯</div>
+                <h3>הישג חדש! 🎉</h3>
+                <p>${text}</p>
             `;
+            achievement.classList.add('show');
+            
+            setTimeout(() => {
+                achievement.classList.remove('show');
+            }, 3000);
         }
 
-        function readAloud(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'he-IL';
-            speechSynthesis.speak(utterance);
+        function updateStreak() {
+            const lastVisit = localStorage.getItem('lastVisit');
+            const today = new Date().toDateString();
+            
+            if (lastVisit !== today) {
+                streak++;
+                localStorage.setItem('lastVisit', today);
+                document.querySelector('.streak-counter').textContent = `🔥 ${streak} ימים`;
+                
+                if (streak % 7 === 0) {
+                    showAchievement(`מדהים! ${streak} ימים רצופים! 🔥`);
+                }
+            }
         }
 
-        function showQuestion(unitId) {
-            document.querySelector(`#learning${unitId}`).classList.remove('active');
-            document.querySelector(`#question${unitId}`).classList.add('active');
+        function earnCrown() {
+            if (crowns < 3) {
+                const crownsElements = document.querySelectorAll('.crown');
+                crownsElements[crowns].classList.add('earned');
+                crowns++;
+                showAchievement('כתר חדש! 👑');
+                addXP(50);
+            }
         }
 
-        function backToMaterial(unitId) {
-            document.querySelector(`#question${unitId}`).classList.remove('active');
-            document.querySelector(`#learning${unitId}`).classList.add('active');
+        function rotateMascot() {
+            currentMascot = (currentMascot + 1) % mascots.length;
+            const mascotElement = document.querySelector('.mascot');
+            if (mascotElement) {
+                mascotElement.textContent = mascots[currentMascot];
+            }
         }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            generateUnits();
-            updateProgress();
+        window.addEventListener('load', () => {
+            loadUnits();
+            updateStreak();
+            
+            const mascotDiv = document.createElement('div');
+            mascotDiv.className = 'mascot jumping';
+            mascotDiv.textContent = mascots[currentMascot];
+            document.body.appendChild(mascotDiv);
+            
+            setInterval(rotateMascot, 10000);
         });
     </script>
 </body>
