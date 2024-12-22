@@ -1,0 +1,7 @@
+Error processing /mnt/data/image.png: (1, 'Error opening data file /usr/share/tesseract-ocr/5/tessdata/heb.traineddata Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory. Failed loading language \'heb\' Tesseract couldn\'t load any languages! Could not initialize tesseract.')
+Error processing /mnt/data/image2.png: [Errno 2] No such file or directory: '/mnt/data/image2.png'
+Error processing /mnt/data/image3.png: [Errno 2] No such file or directory: '/mnt/data/image3.png'
+Error processing /mnt/data/image4.png: [Errno 2] No such file or directory: '/mnt/data/image4.png'
+Error processing /mnt/data/image5.png: [Errno 2] No such file or directory: '/mnt/data/image5.png'
+Error processing /mnt/data/image6.png: [Errno 2] No such file or directory: '/mnt/data/image6.png'
+Error processing /mnt/data/image7.png: [Errno 2] No such file or directory: '/mnt/data/image7.png'

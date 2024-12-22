@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לימוד נצרות לכיתה ז'</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            direction: rtl; 
+            margin: 20px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section, .question { 
+            margin-top: 20px; 
+            display: none;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .hint { 
+            color: #666;
+            padding: 10px;
+            background-color: #fff3cd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .icon { 
+            cursor: pointer; 
+            margin-right: 10px;
+            font-size: 1.2em;
+            padding: 5px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+        }
+        .active { 
+            display: block; 
+        }
+        button {
+            padding: 8px 16px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .progress {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .feedback {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .feedback.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .results-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>לימוד נצרות לכיתה ז'</h1>
+    <div id="content">
+        <div class="section active" id="section1">
+            <h2>רקע היסטורי</h2>
+            <p id="explanation1">
+                בתקופת הולדת הנצרות, ארץ ישראל הייתה תחת שלטון האימפריה הרומית. 
+                השלטון הרומי השפיע מאוד על החיים הדתיים והחברתיים של התושבים. 
+                בתקופה זו התפתחו תנועות דתיות שונות, וביניהן הנצרות.
+            </p>
+            <span class="icon" onclick="readAloud('explanation1')">🔊</span>
+            <button onclick="nextSection(1)">המשך</button>
+        </div>
+        
+        <div class="section" id="section2">
+            <h2>לידת הנצרות</h2>
+            <p id="explanation2">
+                הנצרות החלה את דרכה כתנועה יהודית קטנה בארץ ישראל. 
+                ישו, מייסד הדת, היה יהודי שלימד את תורתו בקרב היהודים. 
+                תורתו כללה פרשנות חדשה למצוות היהדות ורעיונות חדשים.
+            </p>
+            <span class="icon" onclick="readAloud('explanation2')">🔊</span>
+            <button onclick="nextSection(2)">המשך</button>
+        </div>
+        
+        <div class="section" id="section3">
+            <h2>עיקרי האמונה</h2>
+            <p id="explanation3">
+                הנצרות היא דת מונותאיסטית המאמינה באל אחד.
+                השילוש הקדוש מורכב משלושה חלקים: האב (האל), הבן (ישו) ורוח הקודש.
+                לפי האמונה הנוצרית, ישו הוא התגלמות אלוהית בדמות אדם שירד לעולם כדי לגאול את האנושות מחטאיה.
+            </p>
+            <span class="icon" onclick="readAloud('explanation3')">🔊</span>
+            <button onclick="nextSection(3)">המשך</button>
+        </div>
+
+        <div class="section" id="section4">
+            <h2>הסקרמנטים - טקסים מקודשים</h2>
+            <p id="explanation4">
+                בנצרות ישנם שבעה טקסים מקודשים חשובים:
+                1. טבילה - טקס הכניסה לנצרות
+                2. אישוש - טקס התבגרות דתי
+                3. נישואין - טקס נישואין קדוש
+                4. מיסה - תפילה מרכזית
+                5. וידוי - טקס בקשת מחילה
+                6. משיחה אחרונה - ברכה לחולים
+                7. הסמכה לכהונה - הסמכת כמרים
+            </p>
+            <span class="icon" onclick="readAloud('explanation4')">🔊</span>
+            <button onclick="startQuestions()">התחל מבחן</button>
+        </div>
+
+        <div class="section" id="section5">
+            <h2>התפתחות הנצרות בירושלים</h2>
+            <p id="explanation5">
+                תלמידי ישו התחילו להפיץ את הנצרות אצל עובדי אלילים. הם הכריזו כי ישו הוא המשיח וכי הוא מת על הצלב כדי לכפר על חטאי האנושות. בתחילה, הנצרות התפתחה בקרב יהודים בירושלים, אך בהדרגה התפשטה גם לקהילות לא-יהודיות.
+            </p>
+            <span class="icon" onclick="readAloud('explanation5')">🔊</span>
+            <button onclick="nextSection(5)">המשך</button>
+        </div>
+
+        <div class="section" id="section6">
+            <h2>בית התפילה הנוצרי</h2>
+            <p id="explanation6">
+                הכנסייה היא מרכז התפילה והפולחן הנוצרי. במבנה הכנסייה יש אלמנטים סמליים רבים: הצלב, תמונות קדושים, מזבח, ומקום מיוחד לטקסים. הכנסייה משמשת גם כמקום להתכנסות הקהילה ולקיום הטקסים המקודשים.
+            </p>
+            <span class="icon" onclick="readAloud('explanation6')">🔊</span>
+            <button onclick="nextSection(6)">המשך</button>
+        </div>
+
+        <div class="progress" id="progress"></div>
+        
+        <div class="question" id="question1">
+            <p id="q1">מתי החל השלטון הרומי בארץ ישראל?</p>
+            <span class="icon" onclick="readAloud('q1')">🔊</span>
+            <button onclick="showHint(1)">רמז</button>
+            <p class="hint" id="hint1" style="display:none;">חשוב על תקופת פומפיוס.</p>
+            <ul>
+                <li><input type="radio" name="q1" value="1"> 63 לפנה"ס</li>
+                <li><input type="radio" name="q1" value="0"> 70 לספירה</li>
+                <li><input type="radio" name="q1" value="0"> 132 לספירה</li>
+            </ul>
+            <button onclick="checkAnswer(1)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question7">
+            <p id="q7">כיצד התפתחה הנצרות בתחילת דרכה?</p>
+            <span class="icon" onclick="readAloud('q7')">🔊</span>
+            <button onclick="showHint(7)">רמז</button>
+            <p class="hint" id="hint7" style="display:none;">חשוב על הקשר ליהדות בתחילת הדרך.</p>
+            <ul>
+                <li><input type="radio" name="q7" value="1"> החלה ככת יהודית והתפתחה לדת נפרדת</li>
+                <li><input type="radio" name="q7" value="0"> החלה כדת רומית</li>
+                <li><input type="radio" name="q7" value="0"> נוסדה כדת עצמאית מההתחלה</li>
+            </ul>
+            <button onclick="checkAnswer(7)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question8">
+            <p id="q8">מה היה היחס הראשוני של השלטון הרומי לנצרות?</p>
+            <span class="icon" onclick="readAloud('q8')">🔊</span>
+            <button onclick="showHint(8)">רמז</button>
+            <p class="hint" id="hint8" style="display:none;">חשוב על רדיפות.</p>
+            <ul>
+                <li><input type="radio" name="q8" value="1"> רדפו את הנוצרים</li>
+                <li><input type="radio" name="q8" value="0"> קיבלו אותם בברכה</li>
+                <li><input type="radio" name="q8" value="0"> התעלמו מהם לחלוטין</li>
+            </ul>
+            <button onclick="checkAnswer(8)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question9">
+            <p id="q9">מהם המאפיינים העיקריים של הכנסייה?</p>
+            <span class="icon" onclick="readAloud('q9')">🔊</span>
+            <button onclick="showHint(9)">רמז</button>
+            <p class="hint" id="hint9" style="display:none;">חשוב על הסמלים והשימושים.</p>
+            <ul>
+                <li><input type="radio" name="q9" value="1"> מקום תפילה עם צלב, תמונות קדושים ומזבח</li>
+                <li><input type="radio" name="q9" value="0"> מבנה ללא סמלים דתיים</li>
+                <li><input type="radio" name="q9" value="0"> מקום המיועד רק לכמרים</li>
+            </ul>
+            <button onclick="checkAnswer(9)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question10">
+            <p id="q10">מה היה המפנה הגדול בהתפתחות הנצרות?</p>
+            <span class="icon" onclick="readAloud('q10')">🔊</span>
+            <button onclick="showHint(10)">רמז</button>
+            <p class="hint" id="hint10" style="display:none;">חשוב על השינוי ביחס השלטון.</p>
+            <ul>
+                <li><input type="radio" name="q10" value="1"> קבלתה כדת רשמית על ידי הקיסר קונסטנטינוס</li>
+                <li><input type="radio" name="q10" value="0"> הקמת הכנסייה הראשונה</li>
+                <li><input type="radio" name="q10" value="0"> כתיבת הברית החדשה</li>
+            </ul>
+            <button onclick="checkAnswer(10)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question11">
+            <p id="q11">מה היה המצב החברתי בארץ ישראל בתקופת הולדת הנצרות?</p>
+            <span class="icon" onclick="readAloud('q11')">🔊</span>
+            <button onclick="showHint(11)">רמז</button>
+            <p class="hint" id="hint11" style="display:none;">חשוב על היחסים בין היהודים לרומאים והמצב הפנימי</p>
+            <ul>
+                <li><input type="radio" name="q11" value="0">החברה הייתה מאוחדת</li>
+                <li><input type="radio" name="q11" value="1">היו מתחים פנימיים וחיצוניים</li>
+                <li><input type="radio" name="q11" value="0">הייתה שלווה מוחלטת</li>
+                <li><input type="radio" name="q11" value="0">לא היו כתות דתיות</li>
+            </ul>
+            <button onclick="checkAnswer(11)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question12">
+            <p id="q12">מדוע התפתחו תנועות משיחיות בתקופה זו?</p>
+            <span class="icon" onclick="readAloud('q12')">🔊</span>
+            <button onclick="showHint(12)">רמז</button>
+            <p class="hint" id="hint12" style="display:none;">המצב הפוליטי והחברתי הקשה</p>
+            <ul>
+                <li><input type="radio" name="q12" value="0">בגלל השגשוג הכלכלי</li>
+                <li><input type="radio" name="q12" value="1">בגלל המתח והציפייה לגאולה</li>
+                <li><input type="radio" name="q12" value="0">בגלל השלום עם רומא</li>
+                <li><input type="radio" name="q12" value="0">בגלל פריחה תרבותית</li>
+            </ul>
+            <button onclick="checkAnswer(12)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question13">
+            <p id="q13">מה היה המסר המרכזי של ישו?</p>
+            <span class="icon" onclick="readAloud('q13')">🔊</span>
+            <button onclick="showHint(13)">רמז</button>
+            <p class="hint" id="hint13" style="display:none;">הדגש על אהבת הזולת והתחדשות רוחנית</p>
+            <ul>
+                <li><input type="radio" name="q13" value="0">מרד ברומאים</li>
+                <li><input type="radio" name="q13" value="1">תיקון חברתי ורוחני</li>
+                <li><input type="radio" name="q13" value="0">ביטול המצוות</li>
+                <li><input type="radio" name="q13" value="0">התבדלות מוחלטת</li>
+            </ul>
+            <button onclick="checkAnswer(13)">בדוק תשובה</button>
+        </div>
+
+        <div class="question" id="question14">
+            <p id="q14">כיצד התייחס ישו למצוות היהדות?</p>
+            <span class="icon" onclick="readAloud('q14')">🔊</span>
+            <button onclick="showHint(14)">רמז</button>
+            <p class="hint" id="hint14" style="display:none;">גישתו הייתה של פרשנות ולא של ביטול</p>
+            <ul>
+                <li><input type="radio" name="q14" value="0">דחה אותן לחלוטין</li>
+                <li><input type="radio" name="q14" value="1">נתן להן פרשנות חדשה</li>
+                <li><input type="radio" name="q14" value="0">התעלם מהן</li>
+                <li><input type="radio" name="q14" value="0">אסר את קיומן</li>
+            </ul>
+            <button onclick="checkAnswer(14)">בדוק תשובה</button>
+        </div>
+
+        <p id="results"></p>
+    </div>
+
+    <script>
+        let successes = 0;
+        let failures = 0;
+        let currentQuestion = 0;
+        const totalQuestions = 14;
+
+        function showHint(questionNumber) {
+            document.getElementById('hint' + questionNumber).style.display = 'block';
+        }
+
+        function nextSection(current) {
+            const currentSection = document.getElementById('section' + current);
+            const nextSection = document.getElementById('section' + (current + 1));
+            
+            if (currentSection) currentSection.classList.remove('active');
+            if (nextSection) nextSection.classList.add('active');
+            updateProgress();
+        }
+
+        function startQuestions() {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('question1').classList.add('active');
+            currentQuestion = 1;
+            updateProgress();
+        }
+
+        function checkAnswer(questionNumber) {
+            const selected = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+            const feedbackDiv = document.getElementById(`feedback${questionNumber}`) || 
+                createFeedbackDiv(questionNumber);
+            
+            if (!selected) {
+                feedbackDiv.innerHTML = '<div class="feedback">אנא בחר תשובה</div>';
+                return;
+            }
+
+            if (parseInt(selected.value) === 1) {
+                successes++;
+                feedbackDiv.innerHTML = '<div class="feedback success">נכון! כל הכבוד! 🎉</div>';
+                setTimeout(() => goToNextQuestion(questionNumber), 1500);
+            } else {
+                failures++;
+                feedbackDiv.innerHTML = '<div class="feedback error">לא נכון. נסה שוב! 🤔</div>';
+            }
+        }
+
+        function createFeedbackDiv(questionNumber) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.id = `feedback${questionNumber}`;
+            document.getElementById(`question${questionNumber}`).appendChild(feedbackDiv);
+            return feedbackDiv;
+        }
+
+        function goToNextQuestion(current) {
+            const currentQ = document.getElementById('question' + current);
+            const nextQ = document.getElementById('question' + (current + 1));
+            
+            if (currentQ) currentQ.classList.remove('active');
+            
+            if (nextQ) {
+                nextQ.classList.add('active');
+                currentQuestion = current + 1;
+                updateProgress();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function updateProgress() {
+            const progressElement = document.getElementById('progress');
+            const activeSection = document.querySelector('.section.active');
+            
+            if (activeSection) {
+                const sectionNumber = activeSection.id.replace('section', '');
+                progressElement.innerText = `לומדים את החומר... שלב ${sectionNumber} מתוך 6`;
+            } else {
+                progressElement.innerText = `שאלה ${currentQuestion} מתוך ${totalQuestions}`;
+            }
+        }
+
+        function showFinalResults() {
+            const total = successes + failures;
+            const percentage = Math.round((successes / total) * 100);
+            
+            const resultsHTML = `
+                <div class="results-container">
+                    <h3>סיימת את המבחן! ${percentage >= 90 ? '🏆' : percentage >= 70 ? '👏' : '📚'}</h3>
+                    <div class="score-details">
+                        <p>תשובות נכונות: <strong>${successes}</strong></p>
+                        <p>תשובות שגויות: <strong>${failures}</strong></p>
+                        <p>ציון: <strong>${percentage}%</strong></p>
+                    </div>
+                    <div class="feedback ${percentage >= 90 ? 'success' : 'error'}">
+                        ${percentage >= 90 ? 'מצוין! אתה שולט בחומר!' : 
+                          percentage >= 70 ? 'טוב מאוד! המשך ללמוד!' : 
+                          'כדאי לחזור על החומר ולנסות שוב.'}
+                    </div>
+                    <button onclick="location.reload()">נסה שוב</button>
+                </div>
+            `;
+            
+            document.getElementById('results').innerHTML = resultsHTML;
+        }
+
+        async function readAloud(elementId) {
+            try {
+                if (!window.speechSynthesis) {
+                    console.error('הדפדפן לא תומך בהקראה');
+                    return;
+                }
+
+                window.speechSynthesis.cancel();
+
+                const text = document.getElementById(elementId).innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                utterance.lang = 'he-IL';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+
+                // המתנה לטעינת קולות
+                await new Promise(resolve => {
+                    if (speechSynthesis.getVoices().length) {
+                        resolve();
+                    } else {
+                        speechSynthesis.onvoiceschanged = resolve;
+                    }
+                });
+
+                const voices = window.speechSynthesis.getVoices();
+                const hebrewVoice = voices.find(voice => voice.lang.includes('he'));
+                if (hebrewVoice) {
+                    utterance.voice = hebrewVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            } catch (error) {
+                console.error('שגיאה בהקראה:', error);
+            }
+        }
+
+        // אתחול התקדמות
+        updateProgress();
+    </script>
+</body>
+</html> 
